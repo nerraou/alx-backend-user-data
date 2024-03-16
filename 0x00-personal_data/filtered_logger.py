@@ -5,7 +5,7 @@ handling Personal Data
 import re
 from typing import List
 import logging
-from mysql.connector.connection import MySQLConnection
+import mysql.connector
 import os
 
 
@@ -37,17 +37,17 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> MySQLConnection:
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """create MySQLConnection"""
-    host = os.environ.get("PERSONAL_DATA_DB_HOST", "localhost")
     user = os.environ.get("PERSONAL_DATA_DB_USERNAME", "root")
     password = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
+    host = os.environ.get("PERSONAL_DATA_DB_HOST", "localhost")
     db_name = os.environ.get("PERSONAL_DATA_DB_NAME")
 
-    connection = MySQLConnection(user=user, password=password,
-                                 host=host,
-                                 database=db_name)
-    return connection
+    return mysql.connector.connection.MySQLConnection(user=user,
+                                                      password=password,
+                                                      host=host,
+                                                      database=db_name)
 
 
 class RedactingFormatter(logging.Formatter):
