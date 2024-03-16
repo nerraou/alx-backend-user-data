@@ -26,9 +26,10 @@ class RedactingFormatter(logging.Formatter):
 
     def __init__(self, fields: List[str]):
         super(RedactingFormatter, self).__init__(self.FORMAT)
+        self.__fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
         """ Filters values in incoming log records using filter_datum """
-        record.message = filter_datum(self.fields, self.REDACTION,
-                                      record.getMessage(), self.SEPARATOR)
-        return super(RedactingFormatter, self).format(record)
+        message = super().format(record)
+        return filter_datum(self.__fields,
+                            self.REDACTION, message, self.SEPARATOR)
