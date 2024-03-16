@@ -16,8 +16,8 @@ def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
     """ function that returns the log message obfuscated:"""
     for field in fields:
-        message = re.sub(f'{field}=.*?{separator}',
-                         f'{field}={redaction}{separator}', message)
+        message = re.sub(f"{field}=.*?{separator}",
+                         f"{field}={redaction}{separator}", message)
     return message
 
 
@@ -67,3 +67,30 @@ class RedactingFormatter(logging.Formatter):
         message = super().format(record)
         return filter_datum(self.__fields,
                             self.REDACTION, message, self.SEPARATOR)
+
+
+def main() -> None:
+    db = get_db()
+
+    cursor = db.cursor()
+
+    cursor.execute("SELECT * FROM users")
+
+    columns = [field[0] for field in cursor.description]
+
+    logger = get_logger()
+
+    for row in cursor:
+        message = ""
+
+        for value, column in zip(row, columns):
+            message += "{}={}; ".format(column, value)
+
+        logger.info(message.strip())
+
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
