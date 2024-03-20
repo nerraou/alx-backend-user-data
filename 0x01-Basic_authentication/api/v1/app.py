@@ -26,8 +26,12 @@ elif auth_type == "basic_auth":
 
 @app.before_request
 def check_auth():
+    """
+    check auth
+    """
     if auth is None:
         return
+
     excluded_paths = [
         "/api/v1/status/",
         "/api/v1/unauthorized/",
