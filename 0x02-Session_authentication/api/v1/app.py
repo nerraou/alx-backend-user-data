@@ -31,7 +31,6 @@ def check_auth():
     """
     if auth is None:
         return
-    setattr(request, "current_user", auth.current_user(request))
     excluded_paths = [
         "/api/v1/status/",
         "/api/v1/unauthorized/",
@@ -41,7 +40,7 @@ def check_auth():
     if auth.require_auth(request.path, excluded_paths):
         if auth.authorization_header(request) is None:
             abort(401)
-
+        setattr(request, "current_user", auth.current_user(request))
         if auth.current_user(request) is None:
             abort(403)
 
