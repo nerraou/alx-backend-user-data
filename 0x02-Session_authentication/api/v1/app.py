@@ -19,11 +19,12 @@ auth = None
 
 auth_type = os.getenv("AUTH_TYPE", "auth")
 
+
 if auth_type == "auth":
     auth = Auth()
 elif auth_type == "basic_auth":
     auth = BasicAuth()
-elif auth == "session_auth":
+elif auth_type == "session_auth":
     auth = SessionAuth()
 
 
@@ -40,6 +41,7 @@ def check_auth():
         "/api/v1/forbidden/"
         ]
 
+    print("OK", request.path)
     if auth.require_auth(request.path, excluded_paths):
         if auth.authorization_header(request) is None:
             abort(401)
