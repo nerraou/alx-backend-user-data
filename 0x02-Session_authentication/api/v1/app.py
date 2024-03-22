@@ -25,7 +25,6 @@ elif auth_type == "basic_auth":
     auth = BasicAuth()
 elif auth == "session_auth":
     auth = SessionAuth()
-    
 
 
 @app.before_request
