@@ -8,4 +8,5 @@ from auth import Auth
 class SessionAuth(Auth):
     """Session Authentication Class"""
     def __init__(self):
+        """init"""
         pass
