@@ -41,12 +41,14 @@ class DB:
         self._session.commit()
         return u
 
-    def find_user_by(self, **kwargs: Dict[str, Union[str, int]]) -> User:
+    def find_user_by(self, **kwargs) -> User:
         """find user by
         """
-        user = self._session.query(User).filter_by(**kwargs).one()
-
-        return user
+        try:
+            user = self._session.query(User).filter_by(**kwargs).one()
+            return user
+        except (NoResultFound, InvalidRequestError):
+            raise
 
     def update_user(self, user_id: int, **kwargs: Dict):
         """update user
