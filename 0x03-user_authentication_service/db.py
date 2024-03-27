@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """DB module
 """
-from typing import Dict
+from typing import Dict, Union
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
@@ -41,14 +41,11 @@ class DB:
         self._session.commit()
         return u
 
-    def find_user_by(self, **kwargs: Dict[str, str]) -> User:
+    def find_user_by(self, **kwargs: Dict[str, Union[str, int]]) -> User:
         """find user by
         """
         try:
-            user = self._session.query(User).filter_by(**kwargs).first()
-
-            if not user:
-                raise NoResultFound()
+            user = self._session.query(User).filter_by(**kwargs).one()
 
             return user
         except NoResultFound:
