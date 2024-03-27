@@ -33,9 +33,7 @@ class DB:
         """add user method
         """
         try:
-            u = User()
-            u.email = email
-            u.hashed_password = hashed_password
+            u = User(email=email, hashed_password=hashed_password)
 
             self._session.add(u)
             self._session.commit()
