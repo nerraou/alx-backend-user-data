@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """DB module
 """
+from typing import Dict, Union
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 
 from user import Base, User
 
@@ -37,3 +40,18 @@ class DB:
         self._session.add(u)
         self._session.commit()
         return u
+
+    def find_user_by(self, **kwargs: Dict[str, Union[str, int]]) -> User:
+        """find user by
+        """
+        try:
+            user = self._session.query(User).filter_by(**kwargs).first()
+
+            if not user:
+                raise NoResultFound()
+
+            return user
+        except NoResultFound:
+            raise NoResultFound()
+        except Exception:
+            raise InvalidRequestError()
