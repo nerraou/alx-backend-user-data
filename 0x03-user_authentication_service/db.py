@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """DB module
 """
-from typing import Dict, Union
+from typing import Dict
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
@@ -41,14 +41,12 @@ class DB:
         self._session.commit()
         return u
 
-    def find_user_by(self, **kwargs) -> User:
+    def find_user_by(self, **kwargs: Dict) -> User:
         """find user by
         """
-        try:
-            user = self._session.query(User).filter_by(**kwargs).one()
-            return user
-        except (NoResultFound, InvalidRequestError):
-            raise
+        user = self._session.query(User).filter_by(**kwargs).one()
+
+        return user
 
     def update_user(self, user_id: int, **kwargs: Dict):
         """update user
