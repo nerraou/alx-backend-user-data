@@ -72,6 +72,9 @@ class Auth:
         """get user from session id
         """
         try:
+            if not session_id:
+                return None
+
             return self._db.find_user_by(session_id=session_id)
         except Exception:
             return None
